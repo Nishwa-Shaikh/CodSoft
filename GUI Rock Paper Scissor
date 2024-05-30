@@ -1,0 +1,116 @@
+score = {'won':0,'lose':0,'tie':0}
+
+import random
+from tkinter import Tk, Label, Button, Toplevel, Text
+global Game
+Game=Tk()
+Game.title('Rock, Paper, Scissor')
+Game.geometry('1300x1400')
+Game.configure(bg='white')
+
+def PLAY():
+    global NW
+    NW=Toplevel(Game)
+    NW.title('Game start')
+    NW.geometry('1300x1400')
+    NW.configure(bg='white')
+    NW_LABEL=Label(NW, text='Excited to play with you!', fg='black', bg='white', font=('Georgia', 23,))
+    NW_LABEL.pack()
+
+    global score
+
+    def USER_CHOICE(user_choice):
+        computer_choice = random.choice(["ROCK", "PAPER", "SCISSOR"])
+        result = determine_winner(user_choice, computer_choice)
+        result_label.config(text=result)
+        score_label.config(text=f'Your Score : Won : {score['won']}, Lose : {score["lose"]} and Tie : {score["tie"]}')
+
+    def determine_winner(user_choice, computer_choice):
+        global score
+        if user_choice == computer_choice:
+            score['tie'] += 1
+            return "It's a tie!"
+        elif user_choice=="ROCK" and computer_choice=="SCISSOR":
+            score['won'] += 1
+            return "You won! and Computer lose! You chose " + user_choice + " and Computer chose " + computer_choice
+        elif user_choice=="ROCK" and computer_choice=="PAPER":
+            score['lose'] += 1
+            return "Computer won! and You lose! You chose " + user_choice + " and Computer chose " + computer_choice
+        elif user_choice=='PAPER' and computer_choice=="ROCK":
+            score['won'] += 1
+            return "You won! and Computer lose! You chose " + user_choice + " and Computer chose " + computer_choice
+        elif user_choice=='PAPER' and computer_choice=="SCISSOR":
+            score['lose'] += 1
+            return "Computer won! and You lose! You chose " + user_choice + " and Computer chose " + computer_choice
+        elif user_choice=="SCISSOR" and computer_choice=="ROCK":
+            score['lose'] += 1
+            return "Computer won! and You lose! User chose " + user_choice + " and Computer chose " + computer_choice
+        else:
+            score['won'] += 1
+            return "You won! and Computer lose! User chose " + user_choice + " and Computer chose " + computer_choice
+
+    def reset_score(score):
+        score['tie'] = 0
+        score['won'] = 0
+        score['lose'] = 0
+        score_label.config(text=f'Your Score : Won : {score['won']}, Lose : {score["lose"]} and Tie : {score["tie"]}')
+
+    def FeedBack():
+        global Feedback_window
+        Feedback_window=Toplevel(NW)
+        Feedback_window.title('FeedBack')
+        Feedback_window.geometry('1300x1400')
+        Feedback_window.configure(bg='white')
+        Feedback_window_LABEL=Label(Feedback_window, text='Your feedback matters!', fg='black', bg='white', font=('Georgia', 23))
+        Feedback_window_LABEL.pack()
+        Feedback_window_Entry=Text(Feedback_window, fg='white', bg='black', font=('Georgia', 23), width=30, height=5)
+        Feedback_window_Entry.place(x=375, y=50)
+        Feedback_window_button=Button(Feedback_window, text='Submit',  fg='white', bg='black', font=('Georgia', 23), command=lambda: Submit())
+        Feedback_window_button.place(x=600, y=280)
+
+    def Submit():
+        Feedback_window.destroy()
+
+    
+    def exit():
+        Game.destroy()
+        NW.destroy()
+
+
+
+    USER_ROCK=Button(NW, text='ROCK', fg='white', bg='brown', font=('Georgia', 23,), width=10, command=lambda: USER_CHOICE("ROCK"))
+    USER_ROCK.pack()
+    USER_PAPER=Button(NW, text='PAPER', fg='white', bg='black', font=('Georgia', 23,), width=10, command=lambda: USER_CHOICE("PAPER"))
+    USER_PAPER.pack()
+    USER_SCISSOR=Button(NW, text='SCISSOR', fg='white', bg='green', font=('Georgia', 23,), width=10,command=lambda: USER_CHOICE("SCISSOR"))
+    USER_SCISSOR.pack()
+
+    result_label = Label(NW, text='',height=5 ,fg='black', bg='white', font=('Georgia', 23,))
+    result_label.pack()
+
+    score_label = Label(NW, text='',fg='black', bg='white', font=('Georgia', 23,))
+    score_label.pack()
+
+    reset = Button(NW,text='RESET', fg='black', bg='yellow', font=('Georgia', 23,), width=10, command=lambda: reset_score(score))
+    reset.place(x=285, y=525)
+
+    feedback=Button(NW, text='Feedback', fg='black', bg='yellow', font=('georgia', 23), width=10, command=lambda: FeedBack())
+    feedback.place(x=550, y=525)
+
+    Exit=Button(NW, text='Exit', fg='black', bg='yellow', font=('Georgia', 23,), width=10, command=lambda:exit())
+    Exit.place(x=800, y=525)
+Instruction=Label(text='Before starting this Game, read these instructions carefully!', fg='black', bg='white', font=('Georgia', 28,))
+Instruction.place(x=190)
+INSTRUCTION1=Label(text="1. You will have 3 options: Rock, Paper and Scissor." , fg='black', bg='white', font=('Georgia', 23,))
+INSTRUCTION1.place(y=150)
+INSTRUCTION2=Label(text='2. Paper beats Rock, Rock beats Scissor and Scissor beats paper.', fg='black', bg='white', font=('Georgia', 23,))
+INSTRUCTION2.place(y=200)
+INSTRUCTION3=Label(text='3. Your Score Will Be saved. If you want to reset your score, press the RESET button.', fg='black', bg='white', font=('Georgia', 23,))
+INSTRUCTION3.place(y=250)
+INSTRUCTION4=Label(text='4. Your feedback matters, So try to give that :)', fg='black', bg='white', font=('Georgia', 23,))
+INSTRUCTION4.place(y=300)
+GoodLuck=Label(text="GOOD LUCK!!", fg='black', bg='white', height=3, font=('Georgia', 38))
+GoodLuck.place(x=500,y=350)
+Next_Button=Button(text='PLAY!', bg='green', fg='white', font=('Gerogia', 23), width=15, command=PLAY)
+Next_Button.place(x=530,y=500)
+Game.mainloop()
